@@ -42,8 +42,8 @@ class DNSOverHTTPSAdapter(HTTPAdapter):
 
         super().__init__(**kwargs)
 
-    def get_connection(self, url, proxies=None):
-        conn = super().get_connection(url, proxies)
+    def get_connection_with_tls_context(self, *args, **kwargs):
+        conn = super().get_connection_with_tls_context(*args, **kwargs)
         if isinstance(conn, SOCKSHTTPSConnectionPool):
             conn.ConnectionCls = SOCKSHTTPSConnection
         elif isinstance(conn, SOCKSHTTPConnectionPool):

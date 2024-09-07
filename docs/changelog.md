@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.0.0
+
+In summary, this update introduce some breaking changes to resolver session and update library dependencies.
+
+### Breaking changes
+
+Now function `requests_doh.resolver.set_resolver_session` only accept `httpx.Client` rather than `requests.Client`. 
+This is because [dnspython changes](https://dnspython.readthedocs.io/en/stable/whatsnew.html#id6) makes it no longer 
+accepting `requests.Client`
+
+And `requests_doh.resolver.get_resolver_session` are now returning `httpx.Client` rather than `requests.Client`
+
+### Dependencies
+
+- Bump requests from v2.31.0 to v2.32.3 due to [CVE-2024-35195](https://github.com/advisories/GHSA-9wx4-h78v-vm56)
+- Bump dnspython from v2.3.0 to v2.6.1 due to [CVE-2023-29483](https://github.com/advisories/GHSA-3rq5-2g8h-59hc)
+
 ## v0.3.3
 
 ### Fix bugs

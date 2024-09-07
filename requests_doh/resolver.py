@@ -1,4 +1,4 @@
-import requests
+import httpx
 from dns.message import make_query
 from dns.rdatatype import RdataType
 from dns.query import https as query_https
@@ -10,7 +10,7 @@ from .exceptions import (
     NoDoHProvider
 )
 
-_resolver_session = None # type: requests.Session
+_resolver_session = None # type: httpx.Client
 _available_providers = {
     "cloudflare": "https://cloudflare-dns.com/dns-query",
     "cloudflare-security": "https://security.cloudflare-dns.com/dns-query",
@@ -39,26 +39,26 @@ def set_resolver_session(session):
 
     Parameters
     -----------
-    session: :class:`requests.Session`
+    session: :class:`httpx.Client`
         An http session to resolve DNS
 
     Raises
     -------
     ValueError
-        ``session`` parameter is not :class:`requests.Session` instance    
+        ``session`` parameter is not :class:`httpx.Client` instance    
     """
     global _resolver_session
 
-    if not isinstance(session, requests.Session):
-        raise ValueError(f"`session` must be `requests.Session`, {session.__class__.__name__}")
+    if not isinstance(session, httpx.Client):
+        raise ValueError(f"`session` must be `httpx.Client`, {session.__class__.__name__}")
     
     _resolver_session = session
 
-def get_resolver_session() -> requests.Session:
+def get_resolver_session() -> httpx.Client:
     """
     Return
     -------
-    requests.Session
+    httpx.Client
         Return an http session for DoH resolver
     """
     return _resolver_session
@@ -164,7 +164,7 @@ def remove_dns_provider(name, fallback=None):
         # Let's try to remove the newly created DNS
         remove_dns_provider("another-dns")
 
-        # If we send request to this URL, it would still working
+        # If we send request to same URL, it would still working
         r = session.get("https://example.com")
         print(r.status_code)
 
@@ -230,7 +230,7 @@ def resolve_dns(host):
     session = get_resolver_session()
 
     if session is None:
-        session = requests.Session()
+        session = httpx.Client()
         set_resolver_session(session)
 
     answers = set()
