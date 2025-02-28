@@ -22,10 +22,11 @@ _available_providers = {
     "adguard-unfiltered": "https://unfiltered.adguard-dns.com/dns-query",
     "quad9": "https://dns.quad9.net/dns-query",
     "quad9-unsecured": "https://dns10.quad9.net/dns-query",
-    "google": "https://dns.google/dns-query"
+    "google": "https://dns.google/dns-query",
+    "hnsdoh": "https://hnsdoh.com/dns-query"
 }
 # Default provider
-_provider = _available_providers["cloudflare"]
+_provider = _available_providers["hnsdoh"]
 
 __all__ = (
     'set_resolver_session', 'get_resolver_session',
@@ -244,10 +245,11 @@ def resolve_dns(host):
     if A_ANSWERS is not None:
         answers.update(A_ANSWERS)
 
+    # REMOVED FOR NOW
     # Query AAAA type
-    AAAA_ANSWERS = query(RdataType.AAAA)
-    if AAAA_ANSWERS is not None:
-        answers.update(AAAA_ANSWERS)
+    # AAAA_ANSWERS = query(RdataType.AAAA)
+    # if AAAA_ANSWERS is not None:
+    #     answers.update(AAAA_ANSWERS)
 
     if not answers:
         raise DNSQueryFailed(
